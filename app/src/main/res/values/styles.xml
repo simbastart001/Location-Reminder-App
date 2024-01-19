@@ -6,4 +6,25 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <!-- Style for the buttons used in the login screen -->
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:background">@drawable/button_ackground</item>
+        <!-- Add any other button attributes you wish to style here -->
+    </style>
+
+    <!-- Style for text buttons like 'Forgot/Reset PIN' -->
+    <style name="TextButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <!-- Add any additional attributes you wish to style here -->
+    </style>
+
 </resources>

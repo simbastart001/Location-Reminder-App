@@ -19,6 +19,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
+        buildConfigField "String", "API_KEY", "\"${properties.getProperty("API_KEY")}\""
+
     }
     buildTypes {
         release {
@@ -58,7 +64,7 @@ dependencies {
     // Room dependencies
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
-        // Kotlin Extensions and Coroutines support for Room
+    // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$roomVersion"
 
     // Koin
@@ -87,14 +93,14 @@ dependencies {
     androidTestImplementation "androidx.arch.core:core-testing:$archTestingVersion"
     androidTestImplementation "org.robolectric:annotations:$robolectricVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersion"
-        // Testing code for more advanced views such as the DatePicker and RecyclerView.
-        // It also contains accessibility checks and a class called CountingIdlingResource.
+    // Testing code for more advanced views such as the DatePicker and RecyclerView.
+    // It also contains accessibility checks and a class called CountingIdlingResource.
     androidTestImplementation "androidx.test.espresso:espresso-contrib:$espressoVersion"
     androidTestImplementation "androidx.test.espresso:espresso-intents:$espressoVersion"
     androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:$espressoVersion"
     androidTestImplementation "junit:junit:$junitVersion"
-        // Testing code should not be included in the main code.
-        // Once https://issuetracker.google.com/128612536 is fixed this can be fixed.
+    // Testing code should not be included in the main code.
+    // Once https://issuetracker.google.com/128612536 is fixed this can be fixed.
     debugImplementation "androidx.fragment:fragment-testing:$fragmentTestingVersion"
     implementation "androidx.test:core:$androidXTestCoreVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"

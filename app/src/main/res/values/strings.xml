@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Location Reminders</string>
+    <string name="app_name">Location Reminder App</string>
     <string name="error_happened">Error happened</string>
     <string name="retry">Retry</string>
     <string name="no_data">No Data</string>
@@ -9,7 +9,7 @@
     <string name="save">Save</string>
     <string name="reminder_saved">Reminder Saved !</string>
     <string name="logout">Logout</string>
-    <string name="welcome_to_the_location_reminder_app">Welcome to the location reminder app</string>
+    <string name="welcome_to_the_location_reminder_app">Welcome to the Location Reminder App</string>
     <string name="login">Login</string>
     <string name="title_activity_maps">Map</string>
     <string name="normal_map">Normal Map</string>
@@ -40,4 +40,20 @@
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
+
+
+    <!--    Login strings-->
+    <string name="login_button_text">Login</string>
+    <string name="logout_button_text">Logout</string>
+    <string name="login_unsuccessful_msg">Login unsuccessful</string>
+    <string name="welcome_message">It\'s currently %1$s.</string>
+    <string name="welcome_message_authed">Hi %1$s! Did you know that %2$s.</string>
+    <string name="login_prompt">Login to set customizations!</string>
+    <string name="login_btn">Login</string>
+
+    <!--Shared Preference Keys -->
+    <string name="preference_fact_type_key">fact_type_pref</string>
+    <string name="create_account">Create Account</string>
+    <string name="forgot_reset_pin">forgot pin</string>
+
 </resources>
