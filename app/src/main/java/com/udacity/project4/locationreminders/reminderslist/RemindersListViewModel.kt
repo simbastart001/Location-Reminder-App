@@ -9,6 +9,9 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.launch
 
+/**
+ * @DrStart:     The RemindersListViewModel is responsible for preparing and managing the data for the ReminderListFragment
+ * */
 class RemindersListViewModel(
     app: Application,
     private val dataSource: ReminderDataSource
@@ -16,10 +19,6 @@ class RemindersListViewModel(
     // list that holds the reminder data to be displayed on the UI
     val remindersList = MutableLiveData<List<ReminderDataItem>>()
 
-    /**
-     * Get all the reminders from the DataSource and add them to the remindersList to be shown on the UI,
-     * or show error if any
-     */
     fun loadReminders() {
         showLoading.value = true
         viewModelScope.launch {
@@ -42,11 +41,10 @@ class RemindersListViewModel(
                     })
                     remindersList.value = dataList
                 }
+
                 is Result.Error ->
                     showSnackBar.value = result.message
             }
-
-            //check if no data has to be shown
             invalidateShowNoData()
         }
     }

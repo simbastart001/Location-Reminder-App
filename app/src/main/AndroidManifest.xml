@@ -28,9 +28,13 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${API_KEY}" />
 
-        <activity android:name=".locationreminders.ReminderDescriptionActivity" />
+        <activity
+            android:name=".locationreminders.ReminderDescriptionActivity"
+            android:exported="true" />
 
-        <activity android:name=".locationreminders.RemindersActivity" />
+        <activity
+            android:name=".locationreminders.RemindersActivity"
+            android:exported="true" />
 
         <activity
             android:name=".authentication.AuthenticationActivity"
@@ -47,7 +51,6 @@
             android:name=".locationreminders.geofence.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".locationreminders.geofence.GeofenceTransitionsJobIntentService"
             android:exported="true"
