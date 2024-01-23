@@ -63,6 +63,9 @@ dependencies {
 
     // Room dependencies
     implementation "androidx.room:room-runtime:$roomVersion"
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     kapt "androidx.room:room-compiler:$roomVersion"
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$roomVersion"

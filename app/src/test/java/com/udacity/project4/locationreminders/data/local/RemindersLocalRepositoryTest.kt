@@ -19,20 +19,23 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * @DrStart:     Executes each task synchronously using Architecture Components.
- * */
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 @MediumTest
 class RemindersLocalRepositoryTest {
 
+    /**
+     * @DrStart:     Executes each task synchronously using Architecture Components.
+     * */
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var database: RemindersDatabase
     private lateinit var repository: RemindersLocalRepository
 
+    /**
+     * @DrStart:     Create an in-memory database and initialize the repository
+     * */
     @Before
     fun setup() {
         database = Room.inMemoryDatabaseBuilder(
@@ -52,11 +55,11 @@ class RemindersLocalRepositoryTest {
     @Test
     fun saveReminder_retrieveReminder_machingProperties() = runBlocking {
         val saved = ReminderDTO(
-            title = "Apples",
-            description = "Remember to buy apples",
-            location = "Esselunga",
-            latitude = 45.56251607979835,
-            longitude = 9.080693912097328
+            title = "ISTART HQ",
+            description = "Get solutions for your code here",
+            location = "Aspindale_Park",
+            latitude = -17.872174952286702,
+            longitude = 30.954970903694633
         )
         repository.saveReminder(saved)
 
@@ -66,7 +69,7 @@ class RemindersLocalRepositoryTest {
         val loaded = repository.getReminder(saved.id)
 
         /**
-         * @DrStart:     Check that the saved and loaded reminders are the same
+         * @DrStart:     Then check that the retrieved reminder matches the reminder that was saved
          * */
         assertThat(loaded, notNullValue())
         loaded as Result.Success
@@ -82,6 +85,7 @@ class RemindersLocalRepositoryTest {
      * */
     @Test
     fun saveReminder_clearAll_nullList() = runBlocking {
+        // GIVEN: save a reminder into the database using the repository function
         val saved = ReminderDTO(
             title = "ISTART HQ",
             description = "Get solutions for your code here",
@@ -94,11 +98,12 @@ class RemindersLocalRepositoryTest {
         /**
          * @DrStart:     Clear all reminders from the database using the repository function
          * */
+
         repository.deleteAllReminders()
         val remindersList = repository.getReminders()
 
         /**
-         * @DrStart:     Check that the list is empty
+         * @DrStart:     Then check that the retrieved reminder matches the reminder that was saved
          * */
         assertThat(remindersList, notNullValue())
         remindersList as Result.Success

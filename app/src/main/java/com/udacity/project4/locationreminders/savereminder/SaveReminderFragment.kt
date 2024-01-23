@@ -154,7 +154,6 @@ class SaveReminderFragment : BaseFragment() {
         _viewModel.onClear()
     }
 
-
     /**
      * @DrStart:     Check if permissions are granted: if not, request them
      */
