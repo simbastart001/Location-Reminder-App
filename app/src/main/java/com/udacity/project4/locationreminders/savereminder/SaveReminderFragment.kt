@@ -104,7 +104,7 @@ class SaveReminderFragment : BaseFragment() {
      */
     @SuppressLint("MissingPermission")
     private fun addReminderGeofence(reminder: ReminderDataItem) {
-        val geofenceDuration = 5 * 60 * 1000 // 5 minutes in milliseconds
+        val geofenceDuration = 5 * 60 * 1000L // 5 minutes in milliseconds
         val geofence = Geofence.Builder()
             .setRequestId(reminder.id)
             .setCircularRegion(
@@ -112,7 +112,7 @@ class SaveReminderFragment : BaseFragment() {
                 _viewModel.longitude.value!!,
                 GEOFENCE_RADIUS_M
             )
-            .setExpirationDuration(Geofence.NEVER_EXPIRE)
+            .setExpirationDuration(geofenceDuration)
             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
             .build()
 

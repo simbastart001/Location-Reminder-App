@@ -4,6 +4,8 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.TaskStackBuilder
@@ -36,6 +38,28 @@ fun sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
     val intent = ReminderDescriptionActivity.newIntent(context.applicationContext, reminderDataItem)
 
     /**
+     * @DrStart:     Customize the look and feel of the notification with an action button and a picture.
+     */
+    val openReminderAction = NotificationCompat.Action.Builder(
+        R.drawable.ic_launcher_foreground,
+        context.getString(R.string.open),
+        PendingIntent.getActivity(
+            context,
+            getUniqueId(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+    ).build()
+
+    val resources: Resources = context.resources
+    val drawableId = R.drawable.maps
+    val bitmap = BitmapFactory.decodeResource(resources, drawableId)
+
+    val bigPicStyle = NotificationCompat.BigPictureStyle()
+        .bigPicture(bitmap)
+        .bigLargeIcon(null)
+
+    /**
      * @DrStart:     Create a PendingIntent that will start ReminderDescriptionActivity
      *               when the user clicks on the notification.
      */
@@ -54,6 +78,8 @@ fun sendNotification(context: Context, reminderDataItem: ReminderDataItem) {
         .setContentText(reminderDataItem.location)
         .setContentIntent(notificationPendingIntent)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .addAction(openReminderAction)
+        .setStyle(bigPicStyle)
         .setAutoCancel(true)
         .build()
 
