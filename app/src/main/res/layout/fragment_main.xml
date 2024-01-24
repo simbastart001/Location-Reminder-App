@@ -32,22 +32,10 @@
             android:layout_marginBottom="16dp"
             android:text="@string/login"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toTopOf="@id/create_account_button"
+            app:layout_constraintBottom_toTopOf="@id/reset_pin_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" /> <!-- Replace with your button style -->
 
-        <Button
-            android:id="@+id/create_account_button"
-            style="@style/ButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:text="@string/create_account"
-            app:layout_constraintBottom_toTopOf="@id/reset_pin_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/reset_pin_button"

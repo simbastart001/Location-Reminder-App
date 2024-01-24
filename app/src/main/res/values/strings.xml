@@ -11,7 +11,7 @@
     <string name="reminder_saved">Reminder Saved !</string>
     <string name="logout">Logout</string>
     <string name="welcome_to_the_location_reminder_app">Welcome to the Location Reminder App</string>
-    <string name="login">Login</string>
+    <string name="login">SIGN IN</string>
     <string name="title_activity_maps">Map</string>
     <string name="normal_map">Normal Map</string>
     <string name="hybrid_map">Hybrid Map</string>
@@ -43,13 +43,13 @@
 
 
     <!--    Login strings-->
-    <string name="login_button_text">Login</string>
-    <string name="logout_button_text">Logout</string>
-    <string name="login_unsuccessful_msg">Login unsuccessful</string>
+    <string name="login_button_text">SIGN IN</string>
+    <string name="logout_button_text">SIGN OUT</string>
+    <string name="login_unsuccessful_msg">Sign in unsuccessful</string>
     <string name="welcome_message">It\'s currently %1$s.</string>
     <string name="welcome_message_authed">Hi %1$s! Did you know that %2$s.</string>
-    <string name="login_prompt">Login to set customizations!</string>
-    <string name="login_btn">Login</string>
+    <string name="login_prompt">Sign in to set customizations!</string>
+    <string name="login_btn">SIGN IN</string>
 
     <!--Shared Preference Keys -->
     <string name="preference_fact_type_key">fact_type_pref</string>

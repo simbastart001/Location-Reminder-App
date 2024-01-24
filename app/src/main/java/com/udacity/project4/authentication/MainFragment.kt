@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.databinding.FragmentMainBinding
@@ -29,7 +30,7 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.authButton.text = getString(R.string.login_btn)
 
@@ -38,43 +39,49 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Observe the authentication state to adjust the UI accordingly
         observeAuthenticationState()
 
-        binding.authButton.setOnClickListener {
-            if (viewModel.authenticationState.value == LoginViewModel.AuthenticationState.AUTHENTICATED) {
-                AuthUI.getInstance().signOut(requireContext())
-            } else {
-                launchSignInFlow()
+        binding.authButton.setOnClickListener { launchSignInFlow() }
+        binding.resetPinButton.setOnClickListener {
+            activity?.let {
+                Snackbar.make(
+                    requireView(),
+                    "Please contact your Administrator",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
-        }
-
-        binding.createAccountButton.setOnClickListener {
-            launchSignInFlow() // The same sign in flow includes account creation
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == SIGN_IN_RESULT_CODE) {
-            val response =
-                IdpResponse.fromResultIntent(data)
+            val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
                 // User successfully signed in
-                startRemindersActivity()
                 Log.i(
                     TAG,
-                    "Successfully signed in user ${FirebaseAuth.getInstance().currentUser?.displayName}!"
+                    "User sign in successfully: ${FirebaseAuth.getInstance().currentUser?.displayName}!"
                 )
+                Snackbar.make(
+                    requireView(),
+                    "Welcome: ${FirebaseAuth.getInstance().currentUser?.displayName}",
+                    Snackbar.LENGTH_LONG
+                ).show()
             } else {
-                Log.i(TAG, "Sign in unsuccessful ${response?.error?.errorCode}")
+                Snackbar.make(
+                    requireView(),
+                    "Sign in unsuccessful ${response?.error?.errorCode}",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                Log.i(TAG, "Sign in unsuccessful: ${response?.error?.errorCode}")
             }
         }
     }
 
     private fun observeAuthenticationState() {
-
         viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
             when (authenticationState) {
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
@@ -82,22 +89,31 @@ class MainFragment : Fragment() {
                     binding.authButton.setOnClickListener {
                         AuthUI.getInstance().signOut(requireContext())
                     }
+                    //Start RemindersActivity after the user has successfully logged in
+                    activity?.let {
+                        val intent = Intent(it, RemindersActivity::class.java)
+                        it.startActivity(intent)
+                        it.finish()
+                    }
                 }
 
                 else -> {
-                    binding.authButton.text =
-                        getString(R.string.login_button_text)
+                    binding.authButton.text = getString(R.string.login_button_text)
                     binding.authButton.setOnClickListener { launchSignInFlow() }
                 }
             }
+
         })
+
     }
 
     private fun launchSignInFlow() {
-        Log.i(TAG, "Launching sign-in flow")
+
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build()
         )
+
+        Log.i(TAG, "before start ActivityForResult")
         startActivityForResult(
             AuthUI.getInstance()
                 .createSignInIntentBuilder()
@@ -105,11 +121,7 @@ class MainFragment : Fragment() {
                 .build(),
             SIGN_IN_RESULT_CODE
         )
-    }
 
-    private fun startRemindersActivity() {
-        val intent = Intent(requireContext(), RemindersActivity::class.java)
-        startActivity(intent)
-        requireActivity().finish()
+
     }
 }

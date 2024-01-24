@@ -35,7 +35,7 @@ import org.koin.test.get
 /**
  * @DrStart:     This class is used to test the RemindersActivity. It is an end to end test. It tests the
  *              RemindersActivity and the ReminderListFragment. It uses the ReminderListViewModel and
- *              SaveReminderViewModel. It uses the RemindersLocalRepository and the LocalDB.
+ *              SaveReminderViewModel. It uses the RemindersLocalRepository and the LocalDataSource.
  *              It uses the DataBindingIdlingResource and the EspressoIdlingResource.
  *              It uses the KoinTest.
  * */
@@ -111,11 +111,11 @@ class RemindersActivityTest :
 
     private fun getReminder(): ReminderDTO {
         return ReminderDTO(
-            title = "title",
-            description = "desc",
-            location = "loc",
-            latitude = 51.271712,
-            longitude = 5.571989
+            title = "ISTART HQ",
+            description = "Get your bugs fixed here!",
+            location = "Aspindale Park",
+            latitude = -17.83088859497177,
+            longitude = 30.964896082878113
         )
     }
 
