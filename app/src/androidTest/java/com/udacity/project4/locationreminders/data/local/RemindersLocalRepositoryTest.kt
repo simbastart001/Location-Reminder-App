@@ -10,6 +10,7 @@ import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -52,11 +53,11 @@ class RemindersLocalRepositoryTest {
     @Test
     fun saveReminder_retrieveReminder_machingProperties() = runBlocking {
         val saved = ReminderDTO(
-            title = "Apples",
-            description = "Remember to buy apples",
-            location = "Esselunga",
-            latitude = 45.56251607979835,
-            longitude = 9.080693912097328
+            title = "ISTART HQ",
+            description = "Get solutions for your code here",
+            location = "Aspindale_Park",
+            latitude = -17.872174952286702,
+            longitude = 30.954970903694633
         )
         repository.saveReminder(saved)
 
@@ -104,4 +105,68 @@ class RemindersLocalRepositoryTest {
         remindersList as Result.Success
         assertThat(remindersList.data, `is`(listOf()))
     }
+
+    /**
+     * @DrStart:     Attempt to retrieve a non-existing reminder from the database using the repository function
+     * */
+    @Test
+    fun getNonExistingReminder_returnsError() = runBlocking {
+        // Choose an ID that is not present in the database
+        val nonExistingId = "nonExistingId"
+
+        /**
+         * @DrStart:     Attempt to retrieve the non-existing reminder from the database using the repository function
+         * */
+        val result = repository.getReminder(nonExistingId)
+
+        /**
+         * @DrStart:     Check that the result is an error with the expected message
+         * */
+        assertThat(result, instanceOf(Result.Error::class.java))
+        result as Result.Error
+        assertThat(result.message, `is`("Reminder not found!"))
+    }
+
+    @Test
+    fun getReminderById_dataFound() = runBlocking {
+//        GIVEN
+        val reminder1 = ReminderDTO(
+            title = "ISTART HQ",
+            description = "Get solutions for your code here",
+            location = "Aspindale_Park",
+            latitude = -17.872174952286702,
+            longitude = 30.954970903694633
+        )
+
+//        WHEN
+        repository.saveReminder(reminder1)
+        val result = repository.getReminder(reminder1.id) as Result.Success
+
+//        THEN
+        assertThat(result.data, `is`(notNullValue()))
+
+    }
+
+
+    @Test
+    fun getReminderDataNotFound() = runBlocking {
+//        GIVEN
+        val reminder1 = ReminderDTO(
+            title = "ISTART HQ",
+            description = "Get solutions for your code here",
+            location = "Aspindale_Park",
+            latitude = -17.872174952286702,
+            longitude = 30.954970903694633
+        )
+
+//        WHEN
+        repository.deleteAllReminders()
+        val result = repository.getReminder(reminder1.id) as Result.Error
+
+//        THEN
+        assertThat(result.message, `is`("Reminder not found!"))
+
+    }
+
+
 }

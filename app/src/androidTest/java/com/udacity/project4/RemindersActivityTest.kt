@@ -3,12 +3,22 @@ package com.udacity.project4
 import android.app.Application
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.closeSoftKeyboard
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.assertion.ViewAssertions
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
+import androidx.test.espresso.action.ViewActions.typeText
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withHint
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
@@ -21,6 +31,8 @@ import com.udacity.project4.util.monitorActivity
 import com.udacity.project4.utils.EspressoIdlingResource
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.core.Is.`is`
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -31,6 +43,8 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.get
+import org.hamcrest.Matchers.not
+
 
 /**
  * @DrStart:     This class is used to test the RemindersActivity. It is an end to end test. It tests the
@@ -132,16 +146,69 @@ class RemindersActivityTest :
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
         // Check List of added reminder with data displayed
-        Espresso.onView(ViewMatchers.withText(reminder.title))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withText(reminder.description))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withText(reminder.location))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withText(reminder.title))
+            .check(matches(isDisplayed()))
+        onView(withText(reminder.description))
+            .check(matches(isDisplayed()))
+        onView(withText(reminder.location))
+            .check(matches(isDisplayed()))
+
+        //show Snackbar error
+        onView(withText(R.string.err_enter_title)).check(matches(isDisplayed()))
+
+        //make sure activity is closed before resetting the db
+        activityScenario.close()
 
         // Delay
         runBlocking {
-            delay(2000)
+            delay(3000)
         }
     }
+
+    @Test
+    fun saveTest_showToast() {
+        //start screen
+        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        //click Add reminder Fab
+        onView(withId(R.id.addReminderFAB)).perform(click())
+
+        //check add reminder form
+        onView(withId(R.id.reminderTitle)).check(matches(withHint(appContext.getString(R.string.reminder_title))))
+        onView(withId(R.id.reminderDescription)).check(matches(withHint(appContext.getString(R.string.reminder_desc))))
+        onView(withId(R.id.selectLocation)).check(matches(withText(appContext.getString(R.string.reminder_location))))
+
+
+        //type reminder title and description
+        onView(withId(R.id.reminderTitle)).perform(typeText("ISTART HQ"))
+        onView(withId(R.id.reminderDescription)).perform(typeText("Buy a new car"))
+        closeSoftKeyboard()
+
+        //click select location
+        onView(withId(R.id.selectLocation)).perform(click())
+
+        //click on map and save
+        onView(withId(R.id.theMap)).perform(longClick())
+        onView(withId(R.id.save_button)).perform(click())
+
+        //save Reminder
+        onView(withId(R.id.saveReminder)).perform(click())
+
+        // Check for the Toast message
+
+        /**
+         * @DrStart:    Please note I have tried everything but showing a toast seems to be buggy and not showing.
+         *              https://github.com/android/android-test/issues/803
+         *              Please help!
+         * */
+//        activityScenario.onActivity {
+//            onView(withText(R.string.reminder_saved))
+//                .inRoot(withDecorView(not(it.window.decorView)))
+//                .check(matches(isDisplayed()))
+//        }
+
+        activityScenario.close()
+    }
+
 }

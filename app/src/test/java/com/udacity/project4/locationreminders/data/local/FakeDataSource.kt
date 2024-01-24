@@ -8,22 +8,16 @@ import com.udacity.project4.locationreminders.data.dto.Result
 class FakeDataSource(private var reminders: MutableList<ReminderDTO>? = mutableListOf()) :
     ReminderDataSource {
 
-    // Provide a fake error to test the failure case
     private var shouldReturnError = false
-
     fun setReturnError(value: Boolean) {
         shouldReturnError = value
     }
 
-
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
-        if (shouldReturnError)
+        if (shouldReturnError) {
             return Result.Error("RemindersTestException")
-
-        return if (reminders == null)
-            Result.Error("Reminders data not found")
-        else
-            Result.Success(reminders!!)
+        }
+        return Result.Success(reminders ?: emptyList())
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
@@ -33,14 +27,14 @@ class FakeDataSource(private var reminders: MutableList<ReminderDTO>? = mutableL
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
         val reminder = reminders?.find { it.id == id }
 
-        return if (reminder == null)
+        return if (reminder == null) {
             Result.Error("Reminder data not found!")
-        else
+        } else {
             Result.Success(reminder)
+        }
     }
 
     override suspend fun deleteAllReminders() {
         reminders?.clear()
     }
-
 }
