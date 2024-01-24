@@ -104,7 +104,7 @@ class SaveReminderFragment : BaseFragment() {
      */
     @SuppressLint("MissingPermission")
     private fun addReminderGeofence(reminder: ReminderDataItem) {
-        val geofenceDuration = 5 * 60 * 1000L // 5 minutes in milliseconds
+        val geofenceDuration = 2 * 60 * 1000L // 2 minutes in milliseconds
         val geofence = Geofence.Builder()
             .setRequestId(reminder.id)
             .setCircularRegion(
@@ -275,7 +275,7 @@ class SaveReminderFragment : BaseFragment() {
     }
 
     companion object {
-        private const val GEOFENCE_RADIUS_M = 100f
+        private const val GEOFENCE_RADIUS_M = 400f
         private const val FOREGROUND_AND_BACKGROUND_PERMISSIONS_REQUEST_CODE = 401
         private const val ONLY_FOREGROUND_PERMISSION_REQUEST_CODE = 402
         private const val TURN_DEVICE_LOCATION_ON_REQUEST_CODE = 403

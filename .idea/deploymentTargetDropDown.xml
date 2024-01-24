@@ -2,16 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="ReminderListFragmentTest">
-        <State />
-      </entry>
-      <entry key="RemindersLocalRepositoryTest">
-        <State />
-      </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="reminderListFragment_reminderList_checkContent()">
         <State />
       </entry>
     </value>

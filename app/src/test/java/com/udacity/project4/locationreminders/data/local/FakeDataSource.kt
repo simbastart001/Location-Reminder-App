@@ -1,5 +1,6 @@
-package com.udacity.project4.locationreminders.data
+package com.udacity.project4.locationreminders.data.local
 
+import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
 
@@ -17,10 +18,10 @@ class FakeDataSource(private var reminders: MutableList<ReminderDTO>? = mutableL
 
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if (shouldReturnError)
-            return Result.Error("TestException")
+            return Result.Error("RemindersTestException")
 
         return if (reminders == null)
-            Result.Error("Reminders list not found")
+            Result.Error("Reminders data not found")
         else
             Result.Success(reminders!!)
     }
@@ -33,7 +34,7 @@ class FakeDataSource(private var reminders: MutableList<ReminderDTO>? = mutableL
         val reminder = reminders?.find { it.id == id }
 
         return if (reminder == null)
-            Result.Error("Reminder not found!")
+            Result.Error("Reminder data not found!")
         else
             Result.Success(reminder)
     }
