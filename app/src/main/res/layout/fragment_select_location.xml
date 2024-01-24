@@ -15,7 +15,7 @@
 
         <!-- TODO: Add the map fragment for the user to select the location -->
         <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
+            android:id="@+id/theMap"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"

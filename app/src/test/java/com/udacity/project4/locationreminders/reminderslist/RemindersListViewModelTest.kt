@@ -91,6 +91,9 @@ class RemindersListViewModelTest {
         assertThat(
             remindersListViewModel.showNoData.getOrAwaitValue(), `is`(true)
         )
+        assertThat(
+            remindersListViewModel.showSnackBar.getOrAwaitValue(), `is`("Reminders data not found")
+        )
 
     }
 

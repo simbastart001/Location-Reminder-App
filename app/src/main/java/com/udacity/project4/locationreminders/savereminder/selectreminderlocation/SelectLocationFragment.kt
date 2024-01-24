@@ -43,7 +43,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         binding.viewModel = _viewModel
         binding.lifecycleOwner = this
 
-        mapView = binding.mapView
+        mapView = binding.theMap
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
 

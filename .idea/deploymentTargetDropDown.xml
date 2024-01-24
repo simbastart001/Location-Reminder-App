@@ -2,7 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="RemindersActivityTest">
+        <State />
+      </entry>
+      <entry key="addNewReminder_ListUpdatedWithNewReminder()">
+        <State />
+      </entry>
       <entry key="app">
+        <State />
+      </entry>
+      <entry key="createReminder()">
+        <State />
+      </entry>
+      <entry key="fromListActivity_createReminder_checkResult()">
         <State />
       </entry>
     </value>

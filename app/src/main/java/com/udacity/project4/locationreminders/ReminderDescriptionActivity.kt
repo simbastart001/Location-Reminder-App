@@ -25,7 +25,7 @@ import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var binding: ActivityReminderDescriptionBinding
-    private lateinit var mapView: MapView
+    private lateinit var mapMarker: MapView
     private lateinit var map: GoogleMap
     private lateinit var reminder: ReminderDataItem
 
@@ -55,10 +55,9 @@ class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
             reminderDataItem = reminder
         }
 
-        // Set the mapView
-        mapView = binding.mapMarker
-        mapView.onCreate(savedInstanceState)
-        mapView.getMapAsync(this)
+        mapMarker = binding.mapMarker
+        mapMarker.onCreate(savedInstanceState)
+        mapMarker.getMapAsync(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -109,26 +108,26 @@ class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onResume() {
         super.onResume()
-        mapView.onResume()
+        mapMarker.onResume()
     }
 
     override fun onPause() {
         super.onPause()
-        mapView.onPause()
+        mapMarker.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mapView.onDestroy()
+        mapMarker.onDestroy()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        mapView.onSaveInstanceState(outState)
+        mapMarker.onSaveInstanceState(outState)
     }
 
     override fun onLowMemory() {
         super.onLowMemory()
-        mapView.onLowMemory()
+        mapMarker.onLowMemory()
     }
 }
