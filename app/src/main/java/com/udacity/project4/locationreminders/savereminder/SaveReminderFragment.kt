@@ -66,14 +66,9 @@ class SaveReminderFragment : BaseFragment() {
         binding.lifecycleOwner = this
 
         binding.selectLocation.setOnClickListener {
-            // Check if permissions are enabled. If not, warn the user to activate them
-            if (permissionsAndDeviceLocationEnabled) {
-                // Navigate to another fragment to get the user location
-                val directions = SaveReminderFragmentDirections
-                    .actionSaveReminderFragmentToSelectLocationFragment()
-                _viewModel.navigationCommand.value = NavigationCommand.To(directions)
-            } else
-                enablePermissionsAndDeviceLocation()
+            val directions = SaveReminderFragmentDirections
+                .actionSaveReminderFragmentToSelectLocationFragment()
+            _viewModel.navigationCommand.value = NavigationCommand.To(directions)
         }
 
         binding.saveReminder.setOnClickListener {
