@@ -161,7 +161,7 @@ class RemindersActivityTest :
 
         // Delay
         runBlocking {
-            delay(3000)
+            delay(2000)
         }
     }
 
@@ -198,15 +198,16 @@ class RemindersActivityTest :
         // Check for the Toast message
 
         /**
-         * @DrStart:    Please note I have tried everything but showing a toast seems to be buggy and not showing.
+         * @DrStart:    Please note I have tried everything but showing a toast seems to be buggy
+         *              and not showing from my Android 11 device.
          *              https://github.com/android/android-test/issues/803
          *              Please help!
          * */
-//        activityScenario.onActivity {
-//            onView(withText(R.string.reminder_saved))
-//                .inRoot(withDecorView(not(it.window.decorView)))
-//                .check(matches(isDisplayed()))
-//        }
+        activityScenario.onActivity {
+            onView(withText(R.string.reminder_saved))
+                .inRoot(withDecorView(not(it.window.decorView)))
+                .check(matches(isDisplayed()))
+        }
 
         activityScenario.close()
     }

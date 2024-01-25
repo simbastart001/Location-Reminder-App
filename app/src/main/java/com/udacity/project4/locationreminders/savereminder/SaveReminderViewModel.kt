@@ -90,6 +90,28 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         return true
     }
 
+    /**
+     * @DrStart:     Add method to delete a single reminder from the data source
+     */
+    fun deleteReminder(reminderData: ReminderDataItem) {
+        showLoading.value = true
+        viewModelScope.launch {
+            dataSource.deleteReminder(
+                ReminderDTO(
+                    reminderData.title,
+                    reminderData.description,
+                    reminderData.location,
+                    reminderData.latitude,
+                    reminderData.longitude,
+                    reminderData.id
+                )
+            )
+            showLoading.value = false
+            showToast.value = app.getString(R.string.reminder_deleted)
+            navigationCommand.value = NavigationCommand.Back
+        }
+    }
+
     fun backToPreviousFragment() {
         navigationCommand.value = NavigationCommand.Back
     }
