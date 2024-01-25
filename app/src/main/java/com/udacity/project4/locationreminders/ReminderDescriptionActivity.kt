@@ -69,7 +69,6 @@ class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.deleteReminder.setOnClickListener {
-            Log.i("DeleteDebug", "Delete button clicked")
             _viewModel.deleteReminder(reminder.id)
             navigateBackToRemindersList()
         }
