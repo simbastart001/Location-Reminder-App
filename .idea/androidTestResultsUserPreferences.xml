@@ -24,6 +24,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global Nokia C2" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="itel itel W5002" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
