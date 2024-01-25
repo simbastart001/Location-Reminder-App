@@ -23,9 +23,23 @@ class FakeDataSource(private var reminders: MutableList<ReminderDTO> = mutableLi
         reminders.add(reminder)
     }
 
-    override suspend fun getReminder(id: String): Result<ReminderDTO> {
+    override suspend fun deleteReminder(id: String): Result<Unit> {
         val reminder = reminders.find { it.id == id }
 
+        return if (reminder == null) {
+            Result.Error("Reminder data not found!")
+        } else {
+            reminders.remove(reminder)
+            Result.Success(Unit)
+        }
+    }
+
+    override suspend fun getReminder(id: String): Result<ReminderDTO> {
+        if (shouldReturnError) {
+            return Result.Error("Test exception")
+        }
+
+        val reminder = reminders.find { it.id == id }
         return if (reminder == null) {
             Result.Error("Reminder data not found!")
         } else {

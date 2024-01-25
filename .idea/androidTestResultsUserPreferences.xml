@@ -16,6 +16,19 @@
             </AndroidTestResultsTableState>
           </value>
         </entry>
+        <entry key="-1093523158">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="HMD Global Nokia C2" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-986525489">
           <value>
             <AndroidTestResultsTableState>
@@ -90,6 +103,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global Nokia C2" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="itel itel W5002" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -116,6 +130,7 @@
                   <entry key="Duration" value="90" />
                   <entry key="HMD Global Nokia C2" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="itel itel W5002" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
@@ -148,6 +163,19 @@
           </value>
         </entry>
         <entry key="1960108270">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="HMD Global Nokia C2" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1999949753">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">

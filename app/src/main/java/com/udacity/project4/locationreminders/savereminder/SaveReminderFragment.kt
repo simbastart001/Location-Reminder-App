@@ -47,8 +47,9 @@ class SaveReminderFragment : BaseFragment() {
     private lateinit var geofencingClient: GeofencingClient
 
     private var permissionsAndDeviceLocationEnabled = false
-    private var permissionsSnackbar: Snackbar? = null
+    private var isSavePending = false
     private var locationSnackbar: Snackbar? = null
+    private var permissionsSnackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -65,33 +66,46 @@ class SaveReminderFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
 
+        geofencingClient = LocationServices.getGeofencingClient(requireActivity())
+
         binding.selectLocation.setOnClickListener {
             val directions = SaveReminderFragmentDirections
                 .actionSaveReminderFragmentToSelectLocationFragment()
             _viewModel.navigationCommand.value = NavigationCommand.To(directions)
         }
 
+        enablePermissionsAndDeviceLocation()
+
         binding.saveReminder.setOnClickListener {
-            val title = _viewModel.reminderTitle.value
-            val description = _viewModel.reminderDescription.value
-            val location = _viewModel.reminderSelectedLocationStr.value
-            val latitude = _viewModel.latitude.value
-            val longitude = _viewModel.longitude.value
-
-            val reminder = ReminderDataItem(title, description, location, latitude, longitude)
-
-            Log.i("Debugging..", "** in SaveReminder ReminderDataItem: $reminder")
-
-            // Check if permissions and device location are enabled before requesting a geofence
             if (permissionsAndDeviceLocationEnabled) {
-                if (_viewModel.validateAndSaveReminder(reminder))
-                // Add a geofence associated to the reminder if the reminder is filled correctly
-                    addReminderGeofence(reminder)
-            } else
+                saveReminder()
+            } else {
+                // If permissions or location settings are not ready, indicate that a save is pending.
+                isSavePending = true
                 enablePermissionsAndDeviceLocation()
+            }
         }
+    }
 
-        geofencingClient = LocationServices.getGeofencingClient(requireContext())
+    private fun saveReminder() {
+        val title = _viewModel.reminderTitle.value
+        val description = _viewModel.reminderDescription.value
+        val location = _viewModel.reminderSelectedLocationStr.value
+        val latitude = _viewModel.latitude.value
+        val longitude = _viewModel.longitude.value
+
+        val reminder = ReminderDataItem(title, description, location, latitude, longitude)
+
+        // Validate and save the reminder, and then add a geofence.
+        if (_viewModel.validateAndSaveReminder(reminder)) {
+            addReminderGeofence(reminder)
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Please fill in all the fields to save the reminder.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     /**
@@ -253,11 +267,31 @@ class SaveReminderFragment : BaseFragment() {
                 }.show()
             }
         }
-        locationSettingsResponseTask.addOnCompleteListener {
-            if (it.isSuccessful) {
+        locationSettingsResponseTask.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
                 permissionsAndDeviceLocationEnabled = true
+                if (isSavePending) {
+                    saveReminder()
+                    isSavePending = false
+                }
+            } else {
+                // Handle the case where the location settings are not satisfied.
+                // If the user can fix this situation, you should prompt them to do so.
+                if (resolve && task.exception is ResolvableApiException) {
+                    // Prompt the user to change location settings.
+                    val resolvable = task.exception as ResolvableApiException
+                    startIntentSenderForResult(
+                        resolvable.resolution.intentSender,
+                        TURN_DEVICE_LOCATION_ON_REQUEST_CODE,
+                        null, 0, 0, 0, null
+                    )
+                } else {
+                    // Location settings are not satisfied, but we have no way to fix the settings so we won't prompt the user.
+                    permissionsAndDeviceLocationEnabled = false
+                }
             }
         }
+//        end
     }
 
     /**

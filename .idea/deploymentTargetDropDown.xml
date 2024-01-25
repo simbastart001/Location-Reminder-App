@@ -2,7 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="RemindersLocalRepositoryTest">
+      <entry key="addNewReminder_ListUpdatedWithNewReminder()">
+        <State />
+      </entry>
+      <entry key="addNewReminder_NoTitle_ShowsSnackbar()">
         <State />
       </entry>
       <entry key="app">
@@ -11,10 +14,7 @@
       <entry key="createReminderAndCheckRemindersList()">
         <State />
       </entry>
-      <entry key="getReminderById_dataFound()">
-        <State />
-      </entry>
-      <entry key="getReminderDataNotFound()">
+      <entry key="saveTest_checkForToast()">
         <State />
       </entry>
       <entry key="saveTest_showToast()">
