@@ -33,7 +33,7 @@ Location Reminder showcases the application of various components, including but
 ![Screens](app/src/main/res/drawable/screenshots/loc_reminder_app%20(5).png)
 
 ## New Feature
-![Screens](app/src/main/res/drawable/deleteFeat.png)
+![Screens](app/src/main/res/drawable/delete_feat.png)
 
 ## App Structure
 The app comprises three main screens for primary navigation, complemented by an additional screen activated when users interact with incoming notifications. Furthermore, a dedicated login process is seamlessly integrated, ensuring a secure and personalized experience for users.
