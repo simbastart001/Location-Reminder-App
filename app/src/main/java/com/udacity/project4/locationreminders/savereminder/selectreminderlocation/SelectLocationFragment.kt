@@ -1,5 +1,6 @@
 package com.udacity.project4.locationreminders.savereminder.selectreminderlocation
 
+import android.Manifest
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -8,10 +9,18 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.Settings
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.snackbar.Snackbar
+import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
@@ -43,12 +52,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         binding.viewModel = _viewModel
         binding.lifecycleOwner = this
 
-//        check location permissions
-
-
         mapView = binding.theMap
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
+
+//        // Check and request location permission
+//        checkLocationPermission()
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
@@ -62,7 +71,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setMapClick()
         setMapPoiClick()
 
-        moveToCurrentLocation()
+        // Check and request location permission
+        checkLocationPermission()
+
     }
 
     private fun setMapStyle() {
@@ -116,12 +127,112 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 if (it != null) {
                     map.moveCamera(
                         CameraUpdateFactory.newLatLngZoom(
-                            LatLng(it.latitude, it.longitude), 18f
+                            LatLng(it.latitude, it.longitude), 15f
                         )
                     )
                 }
             }
     }
+
+    /**
+     * @DrStart:     Check and request location permission
+     */
+    private fun checkLocationPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                // Permission granted, enable My Location layer
+                enableMyLocation()
+            }
+
+            else -> {
+                // Request permission
+                requestPermissions(
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        }
+    }
+
+    /**
+     * @DrStart:     Enable My Location layer if the permission has been granted. Otherwise, display a
+     *            snackbar explaining that the user needs location permissions in order to play.
+     */
+    private fun enableMyLocation() {
+
+        //check permission
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Snackbar.make(
+                binding.saveButton,
+                R.string.permission_denied_explanation,
+                Snackbar.LENGTH_INDEFINITE
+            )
+                .setAction(R.string.settings) {
+                    startActivity(Intent().apply {
+                        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    })
+                }.show()
+
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+            return
+        }
+
+        //TODO: zoom to the user location after taking his permission
+        map.setMyLocationEnabled(true)
+        moveToCurrentLocation()
+
+    }
+
+
+    /**
+     * @DrStart:     Show a Snackbar explaining why location permission is required
+     */
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission granted, enable My Location layer
+                    enableMyLocation()
+                } else {
+                    // Permission denied, show error message
+                    showPermissionDeniedError()
+                }
+            }
+
+            else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        }
+    }
+
+    /**
+     * @DrStart:     Show a Snackbar explaining why location permission is required
+     */
+    private fun showPermissionDeniedError() {
+        Snackbar.make(
+            binding.root,
+            "Location permission is required!",
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_options, menu)
@@ -175,5 +286,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     override fun onLowMemory() {
         super.onLowMemory()
         mapView.onLowMemory()
+    }
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
     }
 }
