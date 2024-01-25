@@ -16,8 +16,11 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.project4.R
+import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.ActivityReminderDescriptionBinding
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
+import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
+import org.koin.android.ext.android.inject
 
 /**
  * Activity that displays the reminder details after the user clicks on the notification
@@ -28,6 +31,9 @@ class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mapMarker: MapView
     private lateinit var map: GoogleMap
     private lateinit var reminder: ReminderDataItem
+
+    //    Add saveReminderViewModel variable
+    val _viewModel: SaveReminderViewModel by inject()
 
     companion object {
         private const val EXTRA_ReminderDataItem = "EXTRA_ReminderDataItem"
@@ -50,6 +56,7 @@ class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
         // Retrieve the reminder data from the intent extras
         reminder = intent.getSerializableExtra(EXTRA_ReminderDataItem) as ReminderDataItem
 
+        binding.viewModel = _viewModel
         binding.apply {
             lifecycleOwner = this@ReminderDescriptionActivity
             reminderDataItem = reminder
@@ -60,6 +67,13 @@ class ReminderDescriptionActivity : AppCompatActivity(), OnMapReadyCallback {
         mapMarker.getMapAsync(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.deleteReminder.setOnClickListener {
+            Log.i("DeleteDebug", "Delete button clicked")
+            _viewModel.deleteReminder(reminder.id)
+            navigateBackToRemindersList()
+        }
+
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -1,6 +1,7 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.PointOfInterest
@@ -10,6 +11,7 @@ import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
+import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
@@ -93,22 +95,20 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * @DrStart:     Add method to delete a single reminder from the data source
      */
-    fun deleteReminder(reminderData: ReminderDataItem) {
+
+    fun deleteReminder(id: String) {
         showLoading.value = true
         viewModelScope.launch {
-            dataSource.deleteReminder(
-                ReminderDTO(
-                    reminderData.title,
-                    reminderData.description,
-                    reminderData.location,
-                    reminderData.latitude,
-                    reminderData.longitude,
-                    reminderData.id
-                )
-            )
+            val result = dataSource.deleteReminder(id)
             showLoading.value = false
-            showToast.value = app.getString(R.string.reminder_deleted)
-            navigationCommand.value = NavigationCommand.Back
+            when (result) {
+                is Result.Success -> {
+                    showSnackBarInt.value = R.string.reminder_deleted
+                    navigationCommand.value = NavigationCommand.Back
+                }
+
+                is Result.Error -> showSnackBar.value = result.message
+            }
         }
     }
 

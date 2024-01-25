@@ -41,6 +41,24 @@ class RemindersLocalRepository(
         }
 
     /**
+     * Delete a reminder from the db
+     * @param reminder the reminder to delete
+     */
+    override suspend fun deleteReminder(id: String): Result<Unit> =
+        withContext(ioDispatcher) {
+            try {
+                val rows = remindersDao.deleteReminderById(id)
+                if (rows > 0) {
+                    Result.Success(Unit) // deletion successful
+                } else {
+                    Result.Error("Reminder not found!") // no rows affected
+                }
+            } catch (e: Exception) {
+                Result.Error(e.localizedMessage)
+            }
+        }
+
+    /**
      * Get a reminder by its id
      * @param id to be used to get the reminder
      * @return Result the holds a Success object with the Reminder or an Error object with the error message
