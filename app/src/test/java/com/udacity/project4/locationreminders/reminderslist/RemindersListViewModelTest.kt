@@ -83,22 +83,26 @@ class RemindersListViewModelTest {
     @Test
     fun shouldReturnError() = runTest(UnconfinedTestDispatcher()) {
         // GIVEN
+        val expectedErrorMessage = "TestException"
         dataSource.setReturnError(true)
 
         // WHEN
         remindersListViewModel.loadReminders()
 
         // THEN
+        // Check if the no data view should be shown
         assertThat(
-            remindersListViewModel.showNoData.getOrAwaitValue(), `is`(true)
+            remindersListViewModel.showNoData.getOrAwaitValue(),
+            `is`(true)
         )
+        // Check if the snackbar shows the correct error message
         assertThat(
-            remindersListViewModel.showSnackBar.getOrAwaitValue(), `is`("Reminders data not found")
+            remindersListViewModel.showSnackBar.getOrAwaitValue(),
+            `is`(expectedErrorMessage)
         )
 
         // Reset the shouldReturnError flag after the test
         dataSource.setReturnError(false)
-
     }
 
 }

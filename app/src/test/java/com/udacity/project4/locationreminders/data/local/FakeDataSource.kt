@@ -14,20 +14,27 @@ class FakeDataSource(private var reminders: MutableList<ReminderDTO> = mutableLi
 
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if (shouldReturnError) {
-            return Result.Error("Reminders data not found")
+            // Simulate an exception being thrown as it would in the real local data source
+            return Result.Error("TestException")
         }
         return Result.Success(reminders)
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
+        if (shouldReturnError) {
+            throw Exception("TestException")
+        }
         reminders.add(reminder)
     }
 
     override suspend fun deleteReminder(id: String): Result<Unit> {
+        if (shouldReturnError) {
+            return Result.Error("TestException")
+        }
         val reminder = reminders.find { it.id == id }
 
         return if (reminder == null) {
-            Result.Error("Reminder data not found!")
+            Result.Error("Reminder not found!")
         } else {
             reminders.remove(reminder)
             Result.Success(Unit)
@@ -36,18 +43,22 @@ class FakeDataSource(private var reminders: MutableList<ReminderDTO> = mutableLi
 
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
         if (shouldReturnError) {
-            return Result.Error("Reminders data not found")
+            return Result.Error("TestException")
         }
 
         val reminder = reminders.find { it.id == id }
         return if (reminder == null) {
-            Result.Error("Reminder data not found!")
+            Result.Error("Reminder not found!")
         } else {
             Result.Success(reminder)
         }
     }
 
     override suspend fun deleteAllReminders() {
+        if (shouldReturnError) {
+            throw Exception("TestException")
+        }
         reminders.clear()
     }
+
 }
