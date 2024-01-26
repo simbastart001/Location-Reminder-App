@@ -2,22 +2,19 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="addNewReminder_ListUpdatedWithNewReminder()">
+      <entry key="ReminderListFragmentTest">
         <State />
       </entry>
-      <entry key="addNewReminder_NoTitle_ShowsSnackbar()">
+      <entry key="RemindersActivityTest">
+        <State />
+      </entry>
+      <entry key="RemindersDaoTest">
+        <State />
+      </entry>
+      <entry key="RemindersLocalRepositoryTest">
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="createReminderAndCheckRemindersList()">
-        <State />
-      </entry>
-      <entry key="saveTest_checkForToast()">
-        <State />
-      </entry>
-      <entry key="saveTest_showToast()">
         <State />
       </entry>
     </value>

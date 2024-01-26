@@ -11,6 +11,7 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
@@ -94,6 +95,9 @@ class RemindersListViewModelTest {
         assertThat(
             remindersListViewModel.showSnackBar.getOrAwaitValue(), `is`("Reminders data not found")
         )
+
+        // Reset the shouldReturnError flag after the test
+        dataSource.setReturnError(false)
 
     }
 
